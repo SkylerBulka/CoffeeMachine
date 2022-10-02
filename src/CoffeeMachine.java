@@ -70,3 +70,79 @@ public class CoffeeMachine {
                 break;
         }
     }
+
+    private void processReadyCommand() {
+        System.out.println();
+        switch (input) {
+            case "buy":
+                buy();
+                break;
+            case "fill":
+                fill();
+                break;
+            case "take":
+                take();
+                break;
+            case "remaining":
+                printRemaining();
+                break;
+            case "exit":
+                stop();
+                break;
+            default:
+                System.out.println("Unknown command");
+                break;
+        }
+    }
+
+    private void buy() {
+        switch (this.state) {
+            case READY:
+                System.out.print("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino, " +
+                        "back - to main menu: ");
+                this.state = State.BUY_CHOICE;
+                break;
+            case BUY_CHOICE:
+                boolean enough = isEnough(this.input);
+
+                switch (this.input) {
+                    case "1": // espresso
+                        if (enough) {
+                            this.water -= 250;
+                            this.beans -= 16;
+                            this.cups -= 1;
+                            this.money += 4;
+                        }
+                        break;
+                    case "2": // latte
+                        if (enough) {
+                            this.water -= 350;
+                            this.milk -= 75;
+                            this.beans -= 20;
+                            this.cups -= 1;
+                            this.money += 7;
+                        }
+                        break;
+                    case "3": // cappuccino
+                        if (enough) {
+                            this.water -= 200;
+                            this.milk -= 100;
+                            this.beans -= 12;
+                            this.cups -= 1;
+                            this.money += 6;
+                        }
+                        break;
+                    case "back":
+                        break;
+                    default:
+                        System.out.println("Unknown buy command");
+                        break;
+                }
+                ready();
+                break;
+            default:
+                System.out.println("Unknown buy state");
+                ready();
+                break;
+        }
+    }
